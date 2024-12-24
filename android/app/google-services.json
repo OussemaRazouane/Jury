@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "700713087050",
+    "project_id": "makerlab-fa936",
+    "storage_bucket": "makerlab-fa936.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700713087050:android:dc27b7df36520ca39bb6b3",
+        "android_client_info": {
+          "package_name": "com.example.jury"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAq9eWmtId_v8wLRKOGfLPAshgh7JiDgBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700713087050:android:6390fb15968ae07b9bb6b3",
+        "android_client_info": {
+          "package_name": "com.example.makerlab"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAq9eWmtId_v8wLRKOGfLPAshgh7JiDgBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
