@@ -275,7 +275,7 @@ class CustomDialog extends StatefulWidget {
 }
 
 class _CustomDialogState extends State<CustomDialog> {
-  Set<bool> descalifier = {false};
+  Set<bool> descalifier = {true};
   TextEditingController value1 = TextEditingController();
   GlobalKey<FormState> txtKey1 = GlobalKey();
   TextEditingController value2 = TextEditingController();
@@ -398,15 +398,6 @@ class _CustomDialogState extends State<CustomDialog> {
                         SegmentedButton(
                           segments: <ButtonSegment<bool>>[
                             ButtonSegment(
-                                value: false,
-                                label: Text(
-                                  "Califier",
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      color: Colors.brown[800],
-                                      decoration: TextDecoration.none),
-                                )),
-                            ButtonSegment(
                                 value: true,
                                 label: Text(
                                   "Descalifier",
@@ -415,6 +406,16 @@ class _CustomDialogState extends State<CustomDialog> {
                                       color: Colors.brown[800],
                                       decoration: TextDecoration.none),
                                 )),
+                            ButtonSegment(
+                                value: false,
+                                label: Text(
+                                  "Califier",
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      color: Colors.brown[800],
+                                      decoration: TextDecoration.none),
+                                )),
+                            
                           ],
                           selected: descalifier,
                           onSelectionChanged: (v) {
@@ -471,22 +472,26 @@ class _CustomDialogState extends State<CustomDialog> {
                                       "Time ${widget.num}": value2.text
                                     },
                                   });
-                                  Navigator.pop(context);
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    backgroundColor: Colors.green,
-                                    content: Text("Data saved successfully"),
-                                  ));
+                                }else{
+                                  up.update({
+                                    "Trials": FieldValue.delete(),
+                                    "Trial ${widget.num}": {
+                                      "Descalifier ${widget.num}": descalifier.last,
+                                      "Point ${widget.num}": "-",
+                                      "Time ${widget.num}": "-"
+                                    },
+                                  });
                                 }
+                              
                               } else {
                                 up.update({"Round": widget.num + 1});
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  backgroundColor: Colors.green,
-                                  content: Text("Data saved successfully"),
-                                ));
-                              }
+                            }
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                backgroundColor: Colors.green,
+                                content: Text("Data saved successfully"),
+                              ));
                             },
                             style: ButtonStyle(
                                 fixedSize: const WidgetStatePropertyAll(
