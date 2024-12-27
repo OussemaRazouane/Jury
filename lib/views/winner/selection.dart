@@ -80,23 +80,23 @@ class _WinnerSelectionState extends State<WinnerSelection> {
                             child: Text(
                                 currentRound < nbRound
                                     ? 'Next trial'
-                                    : 'See final data',
+                                    :currentRound == nbRound? 'See final data':"",
                                 style: TextStyle(
                                   fontSize: 27,
                                   color: Colors.brown[800],
                                 ))),
-                        IconButton(
+                        if (currentRound <= nbRound) IconButton(
                           onPressed: () {
-                            if (currentRound <= nbRound) {
+                            if (currentRound < nbRound) {
                               Navigator.of(context)
                                   .pushNamed(WinnerSelection.routeName);
                               CacheHelper.saveData(
                                   key: "CurrentRound", value: currentRound + 1);
                             }
                           },
-                          icon: Icon(Icons.navigate_next_rounded,
+                          icon:Icon(Icons.navigate_next_rounded,
                               size: 27, color: Colors.brown[800]),
-                        )
+                        ),
                       ],
                     ),
                   ],

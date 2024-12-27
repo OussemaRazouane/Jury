@@ -200,7 +200,7 @@ class _DataState extends State<Data> {
                           decoration: TextDecoration.none),
                     ),
                     Image.asset(
-                      "errordata2.gif",
+                      "assets/errordata2.gif",
                     ),
                     
                   ],
@@ -241,12 +241,6 @@ class _DataState extends State<Data> {
               child: Center(
                   child: Column(
                 children: [
-                  Image.asset(
-                    "errordata2.gif",
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
                   Text(
                     "Error: Data not founded",
                     style: TextStyle(
@@ -254,6 +248,9 @@ class _DataState extends State<Data> {
                         fontWeight: FontWeight.bold,
                         color: Colors.brown[900],
                         decoration: TextDecoration.none),
+                  ),
+                  Image.asset(
+                    "assets/errordata2.gif",
                   ),
                 ],
               )),
@@ -327,7 +324,7 @@ class _CustomDialogState extends State<CustomDialog> {
                     fit: BoxFit.cover,
                     errorWidget: (context, url, error) {
                       return Image.asset(
-                        "errorimage.gif",
+                        "assets/errorimage.gif",
                         fit: BoxFit.cover,
                       );
                     },

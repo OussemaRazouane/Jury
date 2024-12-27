@@ -77,12 +77,12 @@ class _EssaiSelectionState extends State<EssaiSelection> {
                                 CacheHelper.saveData(key: "CurrentEssai", value:currentEssai + 1);
                               }
                             },
-                            child: Text(currentEssai<nbEssai?'Next trial':'See final data',
+                            child: Text(currentEssai<nbEssai?'Next trial':currentEssai==nbEssai?'See final data':"",
                                 style: TextStyle(
                                   fontSize: 27,
                                   color: Colors.brown[800],
                                 ))),
-                        IconButton(
+                        if(currentEssai <= nbEssai)IconButton(
                           onPressed: () {
                             if(currentEssai <= nbEssai){
                                 Navigator.of(context)

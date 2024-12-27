@@ -27,7 +27,7 @@ class _RoundScreenState extends State<RoundScreen> {
       body: Container(
         decoration: const BoxDecoration(
             image:
-                DecorationImage(image: AssetImage("1.jpg"), fit: BoxFit.cover)),
+                DecorationImage(image: AssetImage("assets/1.jpg"), fit: BoxFit.cover)),
         child: Center(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),

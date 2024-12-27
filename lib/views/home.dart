@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
       backgroundColor: bgColorApp,
       body: Container(
         decoration:const BoxDecoration(
-            image:DecorationImage(image:AssetImage("2.jpg"),fit: BoxFit.cover )
+            image:DecorationImage(image:AssetImage("assets/2.jpg"),fit: BoxFit.cover )
           ),
         child: Center(
           child: BackdropFilter(
