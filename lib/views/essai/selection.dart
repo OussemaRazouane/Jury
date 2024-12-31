@@ -1,7 +1,9 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:jury/DataBase/cache_helper.dart';
 import 'package:jury/constants/constant.dart';
 import 'package:jury/views/essai/essai.dart';
+import 'package:jury/widgets/closeable.dart';
 import 'package:jury/widgets/data_sheet.dart';
 
 class EssaiSelection extends StatefulWidget {
@@ -16,7 +18,7 @@ class _EssaiSelectionState extends State<EssaiSelection> {
   final int nbEssai = int.parse(CacheHelper.getData(
     key: "NbEssai",
   ));
-  final int currentEssai = CacheHelper.getData(
+  int currentEssai = CacheHelper.getData(
     key: "CurrentEssai",
   );
   @override
@@ -26,6 +28,14 @@ class _EssaiSelectionState extends State<EssaiSelection> {
         body: Center(
           child: Column(
             children: [
+              WindowTitleBarBox(
+                child: Row(
+                  children: [
+                    Expanded(child: MoveWindow()),
+                    const WindowButtons()
+                  ],
+                ),
+              ),
               const SizedBox(
                 height: 20,
               ),
@@ -37,17 +47,15 @@ class _EssaiSelectionState extends State<EssaiSelection> {
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(25))),
                 child: Row(
-                  mainAxisAlignment:MainAxisAlignment.spaceBetween ,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         IconButton(
                           onPressed: () {
-                            
-                              Navigator.of(context)
-                                  .pushNamed(EssaiScreen.routeName);
-                            
+                            Navigator.of(context)
+                                .pushNamed(EssaiScreen.routeName);
                           },
                           icon: Icon(Icons.navigate_before_rounded,
                               size: 27, color: Colors.brown[800]),
@@ -57,13 +65,11 @@ class _EssaiSelectionState extends State<EssaiSelection> {
                               Navigator.of(context)
                                   .pushNamed(EssaiScreen.routeName);
                             },
-                            child: Text(
-                                "Go back",
+                            child: Text("Go back",
                                 style: TextStyle(
                                   fontSize: 27,
                                   color: Colors.brown[800],
                                 ))),
-                        
                       ],
                     ),
                     Row(
@@ -71,28 +77,38 @@ class _EssaiSelectionState extends State<EssaiSelection> {
                       children: [
                         TextButton(
                             onPressed: () {
-                              if(currentEssai <= nbEssai){
-                                Navigator.of(context)
-                                    .pushNamed(EssaiSelection.routeName);
-                                CacheHelper.saveData(key: "CurrentEssai", value:currentEssai + 1);
+                              if (currentEssai <= nbEssai) {
+                                setState(() {
+                                  currentEssai += 1;
+                                  CacheHelper.saveData(
+                                      key: "CurrentEssai", value: currentEssai);
+                                });
                               }
                             },
-                            child: Text(currentEssai<nbEssai?'Next trial':currentEssai==nbEssai?'See final data':"",
+                            child: Text(
+                                currentEssai < nbEssai
+                                    ? 'Next trial'
+                                    : currentEssai == nbEssai
+                                        ? 'See final data'
+                                        : "",
                                 style: TextStyle(
                                   fontSize: 27,
                                   color: Colors.brown[800],
                                 ))),
-                        if(currentEssai <= nbEssai)IconButton(
-                          onPressed: () {
-                            if(currentEssai <= nbEssai){
-                                Navigator.of(context)
-                                    .pushNamed(EssaiSelection.routeName);
-                                CacheHelper.saveData(key: "CurrentEssai", value:currentEssai + 1);
-                            }
-                          },
-                          icon: Icon(Icons.navigate_next_rounded,
-                              size: 27, color: Colors.brown[800]),
-                        )
+                        if (currentEssai <= nbEssai)
+                          IconButton(
+                            onPressed: () {
+                              if (currentEssai <= nbEssai) {
+                                setState(() {
+                                  currentEssai += 1;
+                                  CacheHelper.saveData(
+                                      key: "CurrentEssai", value: currentEssai);
+                                });
+                              }
+                            },
+                            icon: Icon(Icons.navigate_next_rounded,
+                                size: 27, color: Colors.brown[800]),
+                          )
                       ],
                     ),
                   ],
@@ -105,12 +121,14 @@ class _EssaiSelectionState extends State<EssaiSelection> {
                   clipBehavior: Clip.hardEdge,
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width / 1.03,
-                  height: MediaQuery.of(context).size.height - 120,
+                  height: MediaQuery.of(context).size.height - 150,
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(25))),
-                  child: Data(path: type, num:currentEssai,)
-              ),
+                  child: Data(
+                    path: type,
+                    num: currentEssai,
+                  )),
             ],
           ),
         ));

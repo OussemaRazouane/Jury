@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "jury" "\0"
+            VALUE "FileDescription", "ISTIC Robots 2.0 Jury" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "jury" "\0"
+            VALUE "InternalName", "ISTIC Robots 2.0 Jury" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "jury.exe" "\0"
-            VALUE "ProductName", "jury" "\0"
+            VALUE "ProductName", "ISTIC Robots 2.0 Jury" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -25,12 +25,16 @@ class _DataState extends State<Data> {
   Future<List<Map<String, dynamic>>> fetchArticles(String path) async {
     try {
       QuerySnapshot querySnapshot;
-      querySnapshot = await _firestore.collection(widget.path).get();
 
       if (!["Line follower", "Maze"].contains(path)) {
         querySnapshot = await _firestore
             .collection(widget.path)
             .where("Round", isEqualTo: widget.num)
+            .get();
+      } else {
+        querySnapshot = await _firestore
+            .collection(widget.path)
+            .where("Trial", isEqualTo: widget.num)
             .get();
       }
       List<Map<String, dynamic>> data = querySnapshot.docs.map((doc) {
@@ -60,6 +64,12 @@ class _DataState extends State<Data> {
           type: PlutoColumnType.text(),
           enableEditingMode: false,
         ),
+        PlutoColumn(
+          title: "TotalHomPoint",
+          field: "TotalHomPoint",
+          type: PlutoColumnType.text(),
+          enableEditingMode: false,
+        ),
         if (!["Line follower", "Maze"].contains(path))
           PlutoColumn(
             title: "Round",
@@ -75,6 +85,7 @@ class _DataState extends State<Data> {
             key != "Leader name" &&
             key != "Robot name" &&
             key != "Round" &&
+            key != "TotalHomPoint" &&
             !key.contains("Trial")) {
           columns.add(PlutoColumn(
             title: key,
@@ -92,15 +103,14 @@ class _DataState extends State<Data> {
             hide: true,
           ));
         } else if (key.contains("Trial")) {
-          if (key == "Trials") {
-            for (String k in data[0][key][0].keys) {
-              columns.add(PlutoColumn(
-                title: k,
-                field: k,
-                type: PlutoColumnType.text(),
-                enableEditingMode: false,
-              ));
-            }
+          if (key == "Trial") {
+            columns.add(PlutoColumn(
+              title: key,
+              field: key,
+              type: PlutoColumnType.text(),
+              enableEditingMode: false,
+              hide: true,
+            ));
           } else {
             for (String k in data[0][key].keys) {
               columns.add(PlutoColumn(
@@ -120,10 +130,8 @@ class _DataState extends State<Data> {
           if (!key.contains("Trial")) {
             l.addAll({key: PlutoCell(value: m[key])});
           } else if (key.contains("Trial")) {
-            if (key == "Trials") {
-              for (String k in m[key][0].keys) {
-                l.addAll({k: PlutoCell(value: m[key][0][k])});
-              }
+            if (key == "Trial") {
+              l.addAll({key: PlutoCell(value: m[key])});
             } else {
               for (String k in m[key].keys) {
                 l.addAll({k: PlutoCell(value: m[key][k])});
@@ -145,11 +153,8 @@ class _DataState extends State<Data> {
       if (["Line follower", "Maze"].contains(path)) {
         for (String key in data[0].keys) {
           if (key.contains('Trial')) {
-            if (key == "Trials") {
-              columnGroups.add(PlutoColumnGroup(title: key, children: [
-                for (String keychild in data[0][key][0].keys)
-                  PlutoColumnGroup(title: keychild, fields: [keychild])
-              ]));
+            if (key == "Trial") {
+              continue;
             } else {
               columnGroups.add(PlutoColumnGroup(title: key, children: [
                 for (String keychild in data[0][key].keys)
@@ -202,7 +207,6 @@ class _DataState extends State<Data> {
                     Image.asset(
                       "assets/errordata2.gif",
                     ),
-                    
                   ],
                 )),
               );
@@ -354,7 +358,12 @@ class _CustomDialogState extends State<CustomDialog> {
                       ),
                       Text(
                         'Leader name : ${widget.row.cells['Leader name']?.value}\n'
-                        'Robot name :  ${widget.row.cells['Robot name']?.value}',
+                        'Robot name :  ${widget.row.cells['Robot name']?.value}\n'
+                        'Total Hmologation Point :  ${widget.row.cells['TotalHomPoint']?.value}\n'
+                        '${[
+                          "Line follower",
+                          "Maze"
+                        ].contains(widget.path) ? "Total Jury Point :  ${widget.row.cells['TotalJuryPoint']?.value}\n" : ""}',
                         style: TextStyle(
                             fontSize: 24,
                             color: Colors.brown[800],
@@ -371,7 +380,6 @@ class _CustomDialogState extends State<CustomDialog> {
                                   type: type,
                                   icon: icon1)),
                         ),
-                        
                       if (["Line follower", "Maze"].contains(widget.path))
                         const SizedBox(
                           height: 20,
@@ -412,7 +420,6 @@ class _CustomDialogState extends State<CustomDialog> {
                                       color: Colors.brown[800],
                                       decoration: TextDecoration.none),
                                 )),
-                            
                           ],
                           selected: descalifier,
                           onSelectionChanged: (v) {
@@ -462,27 +469,38 @@ class _CustomDialogState extends State<CustomDialog> {
                                 if (txtKey1.currentState!.validate() == true &&
                                     txtKey2.currentState!.validate() == true) {
                                   up.update({
-                                    "Trials": FieldValue.delete(),
+                                    "Trial": widget.num + 1,
+                                    "TotalJuryPoint": int.parse(widget.row
+                                            .cells['TotalJuryPoint']?.value) +
+                                        int.parse(value1.text),
                                     "Trial ${widget.num}": {
-                                      "Descalifier ${widget.num}": descalifier.last,
+                                      "Descalifier ${widget.num}":
+                                          descalifier.last,
                                       "Point ${widget.num}": value1.text,
                                       "Time ${widget.num}": value2.text
                                     },
                                   });
-                                }else{
+                                } else {
                                   up.update({
-                                    "Trials": FieldValue.delete(),
+                                    "Trial": widget.num + 1,
+                                    "TotalJuryPoint": int.parse(widget.row
+                                            .cells['TotalJuryPoint']?.value) +
+                                        int.parse(value1.text),
                                     "Trial ${widget.num}": {
-                                      "Descalifier ${widget.num}": descalifier.last,
-                                      "Point ${widget.num}": "-",
-                                      "Time ${widget.num}": "-"
+                                      "Descalifier ${widget.num}":
+                                          descalifier.last,
+                                      "Point ${widget.num}":
+                                          value1.text != "" ? value1.text : "-",
+                                      "Time ${widget.num}":
+                                          value2.text != "" ? value2.text : "-"
                                     },
                                   });
                                 }
-                              
                               } else {
                                 up.update({"Round": widget.num + 1});
-                            }
+                              }
+                              widget.row.cells['TotalJuryPoint']?.value =
+                                  value1.text;
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(

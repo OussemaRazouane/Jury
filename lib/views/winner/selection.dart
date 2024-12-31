@@ -1,6 +1,8 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:jury/DataBase/cache_helper.dart';
 import 'package:jury/constants/constant.dart';
+import 'package:jury/widgets/closeable.dart';
 import 'package:jury/widgets/data_sheet.dart';
 
 class WinnerSelection extends StatefulWidget {
@@ -16,7 +18,7 @@ class _WinnerSelectionState extends State<WinnerSelection> {
   final int nbRound = int.parse(CacheHelper.getData(
     key: "NbRound",
   ));
-  final int currentRound = CacheHelper.getData(
+  int currentRound = CacheHelper.getData(
     key: "CurrentRound",
   );
   @override
@@ -26,6 +28,14 @@ class _WinnerSelectionState extends State<WinnerSelection> {
         body: Center(
           child: Column(
             children: [
+              WindowTitleBarBox(
+                child: Row(
+                  children: [
+                    Expanded(child: MoveWindow()),
+                    const WindowButtons()
+                  ],
+                ),
+              ),
               const SizedBox(
                 height: 20,
               ),
@@ -44,18 +54,28 @@ class _WinnerSelectionState extends State<WinnerSelection> {
                       children: [
                         IconButton(
                           onPressed: () {
-                            Navigator.of(context).pop();
-                            CacheHelper.saveData(
-                                key: "CurrentRound", value: currentRound - 1);
+                            if (currentRound == 1) {
+                              Navigator.of(context).pop();
+                            }
+                            setState(() {
+                              currentRound -= 1;
+                              CacheHelper.saveData(
+                                  key: "CurrentRound", value: currentRound);
+                            });
                           },
                           icon: Icon(Icons.navigate_before_rounded,
                               size: 27, color: Colors.brown[800]),
                         ),
                         TextButton(
                             onPressed: () {
-                              Navigator.of(context).pop();
-                              CacheHelper.saveData(
-                                  key: "CurrentRound", value: currentRound + 1);
+                              if (currentRound == 1) {
+                                Navigator.of(context).pop();
+                              }
+                              setState(() {
+                                currentRound -= 1;
+                                CacheHelper.saveData(
+                                    key: "CurrentRound", value: currentRound);
+                              });
                             },
                             child: Text("Go back",
                                 style: TextStyle(
@@ -70,6 +90,27 @@ class _WinnerSelectionState extends State<WinnerSelection> {
                         TextButton(
                             onPressed: () {
                               if (currentRound <= nbRound) {
+                                setState(() {
+                                  currentRound += 1;
+                                  CacheHelper.saveData(
+                                      key: "CurrentRound", value: currentRound);
+                                });
+                              }
+                            },
+                            child: Text(
+                                currentRound < nbRound
+                                    ? 'Next trial'
+                                    : currentRound == nbRound
+                                        ? 'See final data'
+                                        : "",
+                                style: TextStyle(
+                                  fontSize: 27,
+                                  color: Colors.brown[800],
+                                ))),
+                        if (currentRound <= nbRound)
+                          IconButton(
+                            onPressed: () {
+                              if (currentRound < nbRound) {
                                 Navigator.of(context)
                                     .pushNamed(WinnerSelection.routeName);
                                 CacheHelper.saveData(
@@ -77,26 +118,9 @@ class _WinnerSelectionState extends State<WinnerSelection> {
                                     value: currentRound + 1);
                               }
                             },
-                            child: Text(
-                                currentRound < nbRound
-                                    ? 'Next trial'
-                                    :currentRound == nbRound? 'See final data':"",
-                                style: TextStyle(
-                                  fontSize: 27,
-                                  color: Colors.brown[800],
-                                ))),
-                        if (currentRound <= nbRound) IconButton(
-                          onPressed: () {
-                            if (currentRound < nbRound) {
-                              Navigator.of(context)
-                                  .pushNamed(WinnerSelection.routeName);
-                              CacheHelper.saveData(
-                                  key: "CurrentRound", value: currentRound + 1);
-                            }
-                          },
-                          icon:Icon(Icons.navigate_next_rounded,
-                              size: 27, color: Colors.brown[800]),
-                        ),
+                            icon: Icon(Icons.navigate_next_rounded,
+                                size: 27, color: Colors.brown[800]),
+                          ),
                       ],
                     ),
                   ],
@@ -109,7 +133,7 @@ class _WinnerSelectionState extends State<WinnerSelection> {
                   clipBehavior: Clip.hardEdge,
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width / 1.03,
-                  height: MediaQuery.of(context).size.height - 120,
+                  height: MediaQuery.of(context).size.height - 150,
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(25))),
