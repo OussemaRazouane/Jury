@@ -209,6 +209,7 @@ class _DataState extends State<Data> {
                     ),
                   ],
                 )),
+                
               );
             }
             if (snapshot.hasData) {
@@ -254,7 +255,7 @@ class _DataState extends State<Data> {
                         decoration: TextDecoration.none),
                   ),
                   Image.asset(
-                    "assets/errordata2.gif",
+                    "assets/errordata1.gif",
                   ),
                 ],
               )),
@@ -466,42 +467,29 @@ class _CustomDialogState extends State<CustomDialog> {
                                       .doc(widget.row.cells['ID']?.value);
                               if (["Line follower", "Maze"]
                                   .contains(widget.path)) {
-                                if (txtKey1.currentState!.validate() == true &&
-                                    txtKey2.currentState!.validate() == true) {
-                                  up.update({
-                                    "Trial": widget.num + 1,
-                                    "TotalJuryPoint": int.parse(widget.row
-                                            .cells['TotalJuryPoint']?.value) +
-                                        int.parse(value1.text),
-                                    "Trial ${widget.num}": {
-                                      "Descalifier ${widget.num}":
-                                          descalifier.last,
-                                      "Point ${widget.num}": value1.text,
-                                      "Time ${widget.num}": value2.text
-                                    },
-                                  });
-                                } else {
-                                  up.update({
-                                    "Trial": widget.num + 1,
-                                    "TotalJuryPoint": int.parse(widget.row
-                                            .cells['TotalJuryPoint']?.value) +
-                                        int.parse(value1.text),
-                                    "Trial ${widget.num}": {
-                                      "Descalifier ${widget.num}":
-                                          descalifier.last,
-                                      "Point ${widget.num}":
-                                          value1.text != "" ? value1.text : "-",
-                                      "Time ${widget.num}":
-                                          value2.text != "" ? value2.text : "-"
-                                    },
-                                  });
+                                int k =
+                                    widget.row.cells['TotalJuryPoint']?.value;
+                                if (value1.text != "" && value1.text != "-") {
+                                  k += int.parse(value1.text);
                                 }
+                                up.update({
+                                  "Trial": widget.num + 1,
+                                  "TotalJuryPoint": k,
+                                  "Trial ${widget.num}": {
+                                    "Descalifier ${widget.num}":
+                                        descalifier.last,
+                                    "Point ${widget.num}":
+                                        value1.text != "" ? value1.text : "-",
+                                    "Time ${widget.num}":
+                                        value2.text != "" ? value2.text : "-"
+                                  },
+                                });
+                                widget.row.cells['TotalJuryPoint']?.value = k;
                               } else {
                                 up.update({"Round": widget.num + 1});
                               }
-                              widget.row.cells['TotalJuryPoint']?.value =
-                                  value1.text;
                               Navigator.pop(context);
+
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
                                 backgroundColor: Colors.green,
